@@ -1,10 +1,11 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">Events</router-link> |
     <router-link to="/about">About</router-link>
   </div>
   
   <router-view />
+  <!--This router-view is a placeholder for whichever component we bring up via the router-->
 </template>
 
 <style>
