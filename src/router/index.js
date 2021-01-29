@@ -27,5 +27,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 });
+//the history option uses browser's history.pushState API to enable URL navigation without having 
+//to reload the page
 
 export default router;
