@@ -11,12 +11,34 @@
     <li v-for="(event, id) in events" :key="id">{{event.title}}</li>
   </ul>
   <!--Above, we are calling in the getter getEventById-->
+
+  <div>
+    <input type="number" v-model.number="incrementBy">
+    <button @click="incrementCount">Increment</button>
+    <p>{{count}}</p>
+  </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'EventCreate',
+  data(){
+    return{
+      incrementBy: null
+    }
+  },
+  methods: {
+    incrementCount(){
+      //INCREMENT_COUNT is a mutation, this.incrementBy is the payload
+      //sending over this.incrementBy as a payload to use in the mutation 
+      //this.$store.commit('INCREMENT_COUNT', this.incrementBy)
+      
+      //Below, we are calling a mutation through an action (updateCount) and
+      //pass in the payload of this.incrementBy
+      this.$store.dispatch('updateCount', this.incrementBy)
+    }
+  },
   //below, we can have local computed properties and state variables 
   //by using the spread operator
     computed:{
@@ -32,7 +54,7 @@ export default {
         // },
         //Using mapGetters, we can streamline accessing our getters from store
         ...mapGetters(['getEventById', 'catLength',]),
-        ...mapState(['user','categories','events'])
+        ...mapState(['user','categories','events', 'count'])
     }
   //this is the most concise, calling in our state variables from the store
   //in an array as strings. We don't need to define them with another alias
