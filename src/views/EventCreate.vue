@@ -1,89 +1,109 @@
 <template>
-  <h1>Create Event, {{ user.name }}</h1>
-  <p>{{ user.id }}</p>
-  <ul >
-      <li v-for="(category, id) in categories" :key="id" >{{category}}</li>
-  </ul>
-  <p>There are {{catLength}} categories</p>
-  <!-- able to use the name grabbed from store here-->
-  <p>{{getEventById(4)}}</p>
-  <ul>
-    <li v-for="(event, id) in events" :key="id">{{event.title}}</li>
-  </ul>
-  <!--Above, we are calling in the getter getEventById-->
-
   <div>
-    <input type="number" v-model.number="incrementBy">
-    <button @click="incrementCount">Increment</button>
-    <p>{{count}}</p>
+    <h1>Create Event</h1>
+    <form @submit.prevent="createEvent">
+      <label>Select a category</label>
+      <select v-model="event.category">
+        <option v-for="cat in categories" :key="cat">{{ cat }}</option>
+      </select>
+      <h3>Name & describe your event</h3>
+      <div class="field">
+        <label>Title</label>
+        <input
+          v-model="event.title"
+          type="text"
+          placeholder="Add an event title"
+        />
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <input
+          v-model="event.description"
+          type="text"
+          placeholder="Add a description"
+        />
+      </div>
+      <h3>Where is your event?</h3>
+      <div class="field">
+        <label>Location</label>
+        <input
+          v-model="event.location"
+          type="text"
+          placeholder="Add a location"
+        />
+      </div>
+      <h3>When is your event?</h3>
+      <div class="field">
+        <label>Date</label>
+        <Calendar v-model="event.date" />
+      </div>
+      <div class="field">
+        <label>Select a time</label>
+        <select v-model="event.time">
+          <option v-for="time in times" :key="time">{{ time }}</option>
+        </select>
+      </div>
+      <input type="submit" class="button -fill-gradient" value="Submit" />
+    </form>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import Calendar from 'primevue/calendar';
 export default {
   name: 'EventCreate',
-  data(){
-    return{
-      incrementBy: null
+  components: {
+    Calendar
+  },
+  data() {
+    const times = [];
+    for (let i = 1; i <= 24; i++) {
+      times.push(i + ':00');
     }
+    return {
+      times,
+      categories: this.$store.state.categories,
+      event: this.createFreshEventObject()
+    };
   },
   methods: {
-    incrementCount(){
-      //INCREMENT_COUNT is a mutation, this.incrementBy is the payload
-      //sending over this.incrementBy as a payload to use in the mutation 
-      //this.$store.commit('INCREMENT_COUNT', this.incrementBy)
-      
-      //Below, we are calling a mutation through an action (updateCount) and
-      //pass in the payload of this.incrementBy
-      this.$store.dispatch('updateCount', this.incrementBy)
+    createEvent() {
+      //this function calls the createEvent action in store, which
+      //in turn makes a mutation to state. It passes along the payload
+      //of this.event
+      this.$store.dispatch('createEvent', this.event).then(() => {
+        //re-route the user to the event page they created
+        this.$router.push({
+          name: 'EventDetails',
+          params: {id:this.event.id}
+        })
+        this.event = this.createFreshEventObject();
+      }).catch(()=>{
+        console.log('There was a problem creating your event')
+      })
+    },
+    createFreshEventObject() {
+      const user = this.$store.state.user;
+      const id = Math.floor(Math.random() * 1000000);
+      //when our event is called, it will return this object
+      return {
+        id: id,
+        user: user,
+        category: '',
+        organizer: user,
+        title: '',
+        description: '',
+        date: '',
+        time: '',
+        attendees: []
+      };
     }
-  },
-  //below, we can have local computed properties and state variables 
-  //by using the spread operator
-    computed:{
-        // catLength(){
-        //   //we get the info about the categories through the getters in store
-        //     return this.$store.getters.catLength
-        // },
-        // getEvent(){
-        //   //this accesses the dynamic getter in the store so you can access
-        //   //whichever event you want by passing in the ID number in the template
-        //   //above.
-        //   // return this.$store.getters.getEventById
-        // },
-        //Using mapGetters, we can streamline accessing our getters from store
-        ...mapGetters(['getEventById', 'catLength',]),
-        ...mapState(['user','categories','events', 'count'])
-    }
-  //this is the most concise, calling in our state variables from the store
-  //in an array as strings. We don't need to define them with another alias
-  //computed: mapState(['user', 'categories'])
- //below is slightly less concise way to access state from store
- //will need to use dot notation in template to access specific data
-//  computed: mapState({
-//     user: 'user',
-//     categories: 'categories'
-//   })
-  //Using mapState to take in state and return the property of state we want
-  //    computed: mapState({
-  //        userName: state=>state.user.name,
-  //        userId: state=>state.user.id,
-  //        categories: state.categories
-
-  //    })
-
-  //grabbing the state variable of user from the store and assigning it to a variable
-  //    computed:{
-  //        userName(){
-  //            return this.$store.state.user.name
-  //        },
-  //        userId(){
-  //            return this.$store.state.user.id
-  //        }
-
-  //    }
+  }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.field {
+  margin-bottom: 24px;
+}
+</style>

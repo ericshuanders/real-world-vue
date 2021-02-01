@@ -11,6 +11,7 @@
 import EventCard from '@/components/EventCard.vue';
 import EventService from '@/services/EventService.js';
 
+
 export default {
   name: 'EventList',
   components: {
@@ -18,17 +19,20 @@ export default {
   },
   data() {
     return {
-      events: null
+      events: []
     };
   },
+
   async created() {
     try {
       const response = await EventService.getEvents();
       this.events = response.data;
+      console.log("list view", this.events)
     } catch (error) {
       console.log(error);
     }
   }
+  
 };
 </script>
 <style scoped>
