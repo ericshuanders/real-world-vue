@@ -2,6 +2,7 @@
   <div v-if="event">
     <!--The above causes the component to wait until it has an event before it renders-->
     <h1>{{ event.title }}</h1>
+    <h2>Hosted by: {{event.user.name}}</h2>
     <p>{{ event.time }} on {{ event.date }} @ {{ event.location }}</p>
     <p>{{ event.description }}</p>
   </div>
