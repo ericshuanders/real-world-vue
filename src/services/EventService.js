@@ -13,8 +13,11 @@ const apiClient = axios.create({
 });
 
 export default {
-  getEvents() {
-    return apiClient.get('/events');
+  getEvents(perPage, page) {
+    //pagination: we are sending in how many results per page and the current
+    //page we're on
+    //we're going for something like events?_limit=3&page=2
+    return apiClient.get('/events?_limit=' + perPage + "&_page=" + page);
     
     //this is added on to the base url
   },
