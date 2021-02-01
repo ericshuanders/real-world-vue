@@ -1,31 +1,29 @@
 <template>
-  <div v-if="event">
-    <!--The above causes the component to wait until it has an event before it renders-->
-    <h1>{{ event.title }}</h1>
-    <h2>Hosted by: {{event.user.name}}</h2>
-    <p>{{ event.time }} on {{ event.date }} @ {{ event.location }}</p>
-    <p>{{ event.description }}</p>
-  </div>
+
+<div>
+  <h1>{{event.title}}</h1>
+  <h2>Hosted by: {{event.organizer}}</h2>
+  <h3>{{event.time}} on {{event.date}} at {{event.location}}</h3>
+  <p>{{event.description}}</p>
+  
+</div>
 </template>
 
 <script>
-import EventService from '@/services/EventService.js';
+import {mapState} from 'vuex'
 export default {
+  name:'EventDetail',
   props: ['id'],
   //We can access this "slug" as a prop because we set props:true in our route for EventDetails
-  data() {
-    return {
-      event: null
-    };
+  
+  
+   created() {
+     this.$store.dispatch('fetchEvent', this.id)
+     console.log(this.id)
+     console.log('dispatching')
+     
+   
   },
-  async created() {
-    try {
-      const response = await EventService.getEvent(this.id);
-      //id is accessed throug props
-      this.event = response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  computed: mapState(['event'])
 };
 </script>

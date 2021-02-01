@@ -5,7 +5,8 @@
     <router-link :to="{name: 'EventCreate'}">Create an Event</router-link>
   </div>
   
-  <router-view />
+  <router-view :key="$route.fullPath"/>
+  <!-- Adding :key="$route.fullPath" allows the component ot reload when URL changes, including query parameters -->
   <!--This router-view is a placeholder for whichever component we bring up via the router-->
 </template>
 
