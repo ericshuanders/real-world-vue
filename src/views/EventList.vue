@@ -1,12 +1,13 @@
 <template>
   <div class="events">
-    <h1>Events For Good</h1>
-    <EventCard v-for="event in events" :key="event.id" :event="event" />
+    <h1>Events For Good, {{user.user.name}}</h1>
+    <!-- Above, the first user is the module, the second is the state of that module -->
+    <EventCard v-for="event in event.events" :key="event.id" :event="event" />
     <div v-show="page>1">
       <!-- The 'previous' link will only show if there is a previous page -->
     <router-link :to="{name: 'EventList', query: {page: page-1}}" rel="prev">Previous Page</router-link>
     </div>
-    <div v-show="eventsTotal > page*3">
+    <div v-show="event.eventsTotal > page*3">
       <!-- The 'next' link will only show if there are more events to show-->
     <router-link :to="{name: 'EventList', query: {page: page+1}}" rel="next">Next Page</router-link>
     </div>
@@ -47,7 +48,11 @@ export default {
       //we take 
       return parseInt(this.$route.query.page || 1)
     },
-    ...mapState(['events','eventsTotal'])}
+    // ...mapState(['events','eventsTotal', 'user'])}
+
+    //here we are bringing in moduels, not individual states
+    //ie$store.state.event={events: [], eventsTotal: null}
+    ...mapState(['event','user'])}
   
 };
 </script>

@@ -83,7 +83,8 @@ export default {
       })
     },
     createFreshEventObject() {
-      const user = this.$store.state.user;
+      const user = this.$store.state.user.user;
+      //user.user because user is in a module now
       const id = Math.floor(Math.random() * 1000000);
       //when our event is called, it will return this object
       return {

@@ -24,6 +24,14 @@ export default {
      
    
   },
-  computed: mapState(['event'])
+  computed: 
+  // mapState(['event'])
+
+  //rather than an array, we make mapState take an object where we specify
+  //that event should take in state and return the event within the store's
+  //event module
+  mapState({
+    event: state=>state.event.event
+  })
 };
 </script>
