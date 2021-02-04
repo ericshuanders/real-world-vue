@@ -71,7 +71,9 @@ export default {
       //this function calls the createEvent action in store, which
       //in turn makes a mutation to state. It passes along the payload
       //of this.event
-      this.$store.dispatch('createEvent', this.event).then(() => {
+
+      //Specifying the createEvent inside of event module b/c of NameSpacing
+      this.$store.dispatch('event/createEvent', this.event).then(() => {
         //re-route the user to the event page they created
         this.$router.push({
           name: 'EventDetails',
@@ -83,7 +85,8 @@ export default {
       })
     },
     createFreshEventObject() {
-      const user = this.$store.state.user;
+      const user = this.$store.state.user.user;
+      //user.user because user is in a module now
       const id = Math.floor(Math.random() * 1000000);
       //when our event is called, it will return this object
       return {
