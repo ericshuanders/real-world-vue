@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 export default {
   name:'EventDetail',
   props: ['id'],
@@ -18,7 +18,11 @@ export default {
   
   
    created() {
-     this.$store.dispatch('fetchEvent', this.id)
+     //specifying the fetchEvent inside of event module b/c of NameSpacing
+    //  this.$store.dispatch('event/fetchEvent', this.id)
+
+    //We can use mapActions to shorten this syntax, getting rid of $store.dispatch
+    this.fetchEvent(this.id)
      console.log(this.id)
      console.log('dispatching')
      
@@ -32,6 +36,10 @@ export default {
   //event module
   mapState({
     event: state=>state.event.event
-  })
+  }),
+
+  //We specify the NameSpaced module, 'event,' and then bring in the methods
+  //from that module in an array, in this case 'fetchEvent.'
+  methods: mapActions('event', ['fetchEvent'])
 };
 </script>

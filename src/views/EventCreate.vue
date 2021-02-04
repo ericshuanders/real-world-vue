@@ -71,7 +71,9 @@ export default {
       //this function calls the createEvent action in store, which
       //in turn makes a mutation to state. It passes along the payload
       //of this.event
-      this.$store.dispatch('createEvent', this.event).then(() => {
+
+      //Specifying the createEvent inside of event module b/c of NameSpacing
+      this.$store.dispatch('event/createEvent', this.event).then(() => {
         //re-route the user to the event page they created
         this.$router.push({
           name: 'EventDetails',

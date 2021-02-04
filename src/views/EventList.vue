@@ -36,7 +36,8 @@ export default {
 //4) Our component access the state variable of 'events' to render the Event Cards
 
   created() {
-    this.$store.dispatch('fetchEvents', {
+    //Specifying the fetchEvents inside of event module b/c of NameSpacing
+    this.$store.dispatch('event/fetchEvents', {
       perPage: 3,
       page: this.page
     });
