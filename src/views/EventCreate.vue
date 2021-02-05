@@ -73,16 +73,17 @@ export default {
       //of this.event
 
       //Specifying the createEvent inside of event module b/c of NameSpacing
-      this.$store.dispatch('event/createEvent', this.event).then(() => {
-        //re-route the user to the event page they created
-        this.$router.push({
-          name: 'EventDetails',
-          params: {id:this.event.id}
+      this.$store
+        .dispatch('event/createEvent', this.event)
+        .then(() => {
+          //re-route the user to the event page they created
+          this.$router.push({
+            name: 'EventDetails',
+            params: { id: this.event.id }
+          });
+          this.event = this.createFreshEventObject();
         })
-        this.event = this.createFreshEventObject();
-      }).catch(()=>{
-        console.log('There was a problem creating your event')
-      })
+        .catch(() => {});
     },
     createFreshEventObject() {
       const user = this.$store.state.user.user;
