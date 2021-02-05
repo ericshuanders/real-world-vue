@@ -2,7 +2,8 @@
 
 <div>
   <h1>{{event.title}}</h1>
-  <h2>Hosted by: {{event.organizer}}</h2>
+  <h2 v-if="event.organizer.name">{{event.organizer.name}}</h2>
+  <h2 v-if="!event.organizer.name">Hosted by: {{event.organizer}}</h2>
   <h3>{{event.time}} on {{event.date}} at {{event.location}}</h3>
   <p>{{event.description}}</p>
   
